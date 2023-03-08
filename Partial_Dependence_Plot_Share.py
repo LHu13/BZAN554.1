@@ -1,4 +1,3 @@
-#############################################################################################################
 #imports the necessary packages
 import os
 import tensorflow as tf
@@ -14,7 +13,7 @@ from keras.applications.vgg16 import VGG16
 from pycebox.ice import ice_plot
 import h5py
 
-os.chdir('C:\\Users\\strat\\Desktop\\MSBA\\554(DeepLearning)\\Project_1\\Final_Code')
+os.chdir('C:\\Users\\liana\\OneDrive\\Desktop')
 
 # MODEL ARCHITECTURE
 model = keras.Sequential()
@@ -43,13 +42,16 @@ dataframe_input = test_data[['price', 'order', 'duration', '0', '1', '2', '3', '
 
 input_data = dataframe_input.values
 
+
 y_true = test_data[['quantity']].values
 
-y_pred = model.predict(input_data)
+y_pred = model.predict(input_data) #Results in error
 
 print(r2_score(y_true, y_pred))
 
-ind = 1 #toggle
+###################################### NEW #####################
+
+ind = 2 #toggle this between 1 to get partial plot for X1 and 2 to get partial plot for X2
 
 #Step 2.1
 v = np.unique(input_data[:,ind]) #Returns sorted unique elements of an array
@@ -63,10 +65,13 @@ for i in v:
     #2.2.2 predict response
     yhat = model.predict(cte_X_cp)
     #2.2.3 mean
-    means.append(np.mean(yhat)) #adds mean of predictions to end of list  
+    means.append(np.mean(yhat)) #adds mean of predictions to end of list
+    
+    
+import matplotlib.pyplot as plt    
 
 plt.plot(v, means)
-plt.x.label('Scaled Order')
-plt.y.label('Scaled Quantity')
-plt.pyplot.title('Partial Dependence Plot - Order')
+plt.xlabel("Scaled Duration")
+plt.ylabel("Scaled Quantity")
+plt.title("Partial Dependency Plot-Duration")
 plt.show()
